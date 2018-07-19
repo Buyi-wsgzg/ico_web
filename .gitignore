@@ -1,0 +1,14 @@
+*.swp
+*.swo
+
+# Logs
+logs
+*.log
+
+# Dependency directory
+node_modules
+
+# frontend build directory
+static/output/
+
+server/app_bak.js
