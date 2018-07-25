@@ -6,8 +6,26 @@ const config = allConfig.contract
 var crowdsaleJson = JSON.parse(fs.readFileSync('/home/wsgzg/SolidityProject/ICOcontract/build/contracts/MoeCrowdsale.json', 'utf-8'))
 
 var CrowdContract = config.MOECROWD
+var HttpProvider = config.GANACHE_URL
+
+var web3Provider
+
+let initWeb3 = function( ) {
+  if (typeof web3 !== 'undefined') {
+    // If a web3 instance is already provided by Meta Mask.
+    web3Provider = web3.currentProvider;
+    web3 = new Web3(web3.currentProvider);
+  } else {
+    // Specify default instance if no web3 instance provided
+    web3Provider = new Web3.providers.HttpProvider(HttpProvider);
+    //web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+    web3 = new Web3(web3Provider);
+  }
+}
+
 let isWhiteList = function( addr ) {
-  web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'))
+  initWeb3()
+  //web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'))
 
   return new Promise(( resolve, reject ) => {
     let contract = web3.eth.contract(crowdsaleJson.abi).at(CrowdContract)
@@ -22,7 +40,8 @@ let isWhiteList = function( addr ) {
 }
 
 let investorPayEther = function( tx ) {
-  web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'))
+  initWeb3()
+  //web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'))
 
   return new Promise(( resolve, reject ) => {
     let contract = web3.eth.contract(crowdsaleJson.abi).at(CrowdContract)
